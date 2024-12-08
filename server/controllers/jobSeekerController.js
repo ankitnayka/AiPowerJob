@@ -86,6 +86,7 @@ export const logoutJobSeeker = (req, res) => {
 export const getJobSeekerProfile = async (req, res) => {
     try {
         const jobSeekerId=req.id;
+        console.log(req.id);
         const jobSeeker = await JobSeeker.findById(jobSeekerId).select('-password');
         if (!jobSeeker) {
             return res.status(404).json({ message: 'User not found' });
@@ -102,6 +103,8 @@ export const getJobSeekerProfile = async (req, res) => {
 export const updateJobSeekerProfile = async (req, res) => {
     const { skills, experience, resume } = req.body;
     const jobSeekerId=req.id;
+    console.log(jobSeekerId);
+    
     try {
         // Find the Job Seeker by their ID (from the JWT token or from params)
         const jobSeeker = await JobSeeker.findById(jobSeekerId);  // req.user.id should be populated from authentication middleware

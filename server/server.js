@@ -12,7 +12,13 @@ const app = express();
 app.use(cookieParser());
 
 // Middleware
-app.use(cors());
+const allowedOrigins = ['http://localhost:5173']; // Add your frontend's URL
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true, // Allow cookies to be sent with requests
+  })
+);
 app.use(express.json());
 
 // Database Connection
@@ -20,9 +26,7 @@ connectDB();
 
 // Routes
 app.use("/api/v1/jobseeker", jobSeekerRoutes);
-// app.use("/api/v1/jobs", jobRoutes);
-// app.use('/api/v1/resume',resumeRoutes)
-// app.use("/api/applications", applicationRoutes);
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
