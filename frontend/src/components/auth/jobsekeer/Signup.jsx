@@ -19,7 +19,8 @@ const Signup = () => {
     const [inputData,setInputData]=useState({
         name:"",
         email:"",
-        password:""
+        password:"",
+        phoneNumber:""
     })
 
     const [registerJobseeker,{data,isLoading,isSuccess,error}]=useRegisterJobseekerMutation()
@@ -30,7 +31,7 @@ const Signup = () => {
             toast.success(data?.message || "Register SuccessFully !!!")
         }
         if(error){
-            toast.error(error?.message || "Something worng on frontned")
+            toast.error(error?.data?.message || "Something worng on frontned")
         }
     },[isSuccess,isLoading,error])
 
@@ -70,6 +71,15 @@ const Signup = () => {
                                     type="email"
                                     name="email"
                                 value={inputData.email}
+                                    onChange={onChangeHandler}
+                                    />
+                            </div>
+                            <div className="flex flex-col space-y-1.5">
+                                <Label htmlFor="email">email</Label>
+                                <Input id="email" placeholder="ankitnaykaa0207@"
+                                    type="number"
+                                    name="phoneNumber"
+                                value={inputData.phoneNumber}
                                     onChange={onChangeHandler}
                                     />
                             </div>

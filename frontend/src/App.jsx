@@ -4,6 +4,8 @@ import Home from "./components/Home"
 import Login from "./components/auth/jobsekeer/Login"
 import Layout from "./components/Layout"
 import Signup from "./components/auth/jobsekeer/Signup"
+import Profile from "./components/jobseeker/JobSeekerDetails"
+import JobSeekerDetails from "./components/jobseeker/JobSeekerDetails"
 
 
 const appRouter=createBrowserRouter([
@@ -22,7 +24,12 @@ const appRouter=createBrowserRouter([
       {
         path:"/signup",
         element:<Signup/>
-      }
+      },
+      {
+        path:"/profile",
+        element:<JobSeekerDetails/>
+      },
+      
     ]
   }
 ])
