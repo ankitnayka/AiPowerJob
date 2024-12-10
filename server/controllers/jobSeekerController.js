@@ -1,12 +1,14 @@
-import JobSeeker from '../models/jobseeker.model.js';
+import JobSeeker from '../models/jobseeker.model.js'
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import cloudinary from '../cloudinery/cloudinery.js'
+import getDataUri from '../cloudinery/datauri.js';
 
 
 
 // Signup Controller
 export const signupJobSeeker = async (req, res) => {
-    const { name, email, password ,phoneNumber} = req.body;
+    const { fullName, email, password ,phoneNumber} = req.body;
 
     try {
         // Check if the user already exists
@@ -21,7 +23,7 @@ export const signupJobSeeker = async (req, res) => {
 
         // Create new Job Seeker
         const jobSeeker = await JobSeeker.create({
-            name,
+            fullName,
             email,
             password: hashedPassword,
             phoneNumber:phoneNumber
@@ -43,14 +45,15 @@ export const signupJobSeeker = async (req, res) => {
 // Login Controller
 export const loginJobSeeker = async (req, res) => {
     const { email, password } = req.body;
-
+    
     try {
         // Find Job Seeker by email
         const jobSeeker = await JobSeeker.findOne({ email });
         if (!jobSeeker) {
             return res.status(404).json({ message: 'User not found' });
         }
-
+        console.log(email,password);
+        
         // Compare passwords
         const isMatch = await bcrypt.compare(password, jobSeeker.password);
         if (!isMatch) {
@@ -134,49 +137,215 @@ export const getJobSeekerProfile = async (req, res) => {
 // };
 
 // Update Profile Controller
-export const updateJobSeekerProfile = async (req, res) => {
-    const { skills, experience, resume, bio,name,email } = req.body;
-    const jobSeekerId = req.id;
+// export const updateJobSeekerProfile = async (req, res) => {
+//     const { skills, experience, resume, bio,fullName,email } = req.body;
+//     const jobSeekerId = req.id;
 
-    try {
-        // Find the Job Seeker by ID
-        const jobSeeker = await JobSeeker.findById(jobSeekerId);
-        if (!jobSeeker) {
-            return res.status(404).json({ message: 'User not found' });
-        }
+//     try {
+//         // Find the Job Seeker by ID
+//         const jobSeeker = await JobSeeker.findById(jobSeekerId);
+//         if (!jobSeeker) {
+//             return res.status(404).json({ message: 'User not found' });
+//         }
 
-        // Update profile fields
-        if (skills) {
-            if (Array.isArray(skills)) {
-                jobSeeker.profile.skills = [...new Set(
-                    skills.map(skill => skill.trim()).filter(skill => skill.length > 0)
-                )];
-            } else if (typeof skills === 'string') {
-                jobSeeker.profile.skills = [...new Set(
-                    skills.split(",").map(skill => skill.trim()).filter(skill => skill.length > 0)
-                )];
-            } else {
-                return res.status(400).json({ message: 'Invalid format for skills' });
-            }
-        }
+//         // Update profile fields
+//         if (skills) {
+//             if (Array.isArray(skills)) {
+//                 jobSeeker.profile.skills = [...new Set(
+//                     skills.map(skill => skill.trim()).filter(skill => skill.length > 0)
+//                 )];
+//             } else if (typeof skills === 'string') {
+//                 jobSeeker.profile.skills = [...new Set(
+//                     skills.split(",").map(skill => skill.trim()).filter(skill => skill.length > 0)
+//                 )];
+//             } else {
+//                 return res.status(400).json({ message: 'Invalid format for skills' });
+//             }
+//         }
         
-        if (experience) jobSeeker.profile.experience = experience;
-        if (resume) jobSeeker.profile.resume = resume;
-        if (bio) jobSeeker.profile.bio = bio;
-        if(name) jobSeeker.name=name;
-        if(email) jobSeeker.email=email;
+//         if (experience) jobSeeker.profile.experience = experience;
+//         if (resume) jobSeeker.profile.resume = resume;
+//         if (bio) jobSeeker.profile.bio = bio;
+//         if(fullName) jobSeeker.fullName=fullName;
+//         if(email) jobSeeker.email=email;
+
+//         if(req.files){
+
+//             if(req.files.resume){
+//                     const fileUri=getDataUri(req.files.resume)
+//                     const cloudResponse=await cloudinary.uploader.upload(fileUri.content)
+                    
+                    
+//                     jobSeeker.profile.resume=cloudResponse.secure_url
+//                 }
+//                 if(req.files.profilePhoto){
+//                     const fileUri=getDataUri(req.files.profilePhoto)
+//                     const cloudResponse=await cloudinary.uploader.upload(fileUri.content)
+               
+//                 jobSeeker.profile.profilePhoto = cloudResponse.secure_url
+//             }
+//         }
+
+        
+      
+
+//         // Save changes
+//         await jobSeeker.save();
+
+//         // Return success response
+//         res.status(200).json({
+//             message: 'Profile updated successfully',
+//             jobSeeker: jobSeeker.toJSON(),
+//         });
+//     } catch (error) {
+//         res.status(500).json({ message: 'Error updating profile', error: error.message });
+//     }
+// };
 
 
-        // Save changes
-        await jobSeeker.save();
 
-        // Return success response
-        res.status(200).json({
-            message: 'Profile updated successfully',
-            jobSeeker: jobSeeker.toJSON(),
+
+// Update JobSeeker Profile
+// export const updateJobSeekerProfile = async (req, res) => {
+//     try {
+//         const { fullName, email, phoneNumber, bio, experience, skills } = req.body;
+
+//         let profilePhotoUrl;
+//         let resumeUrl;
+
+//         // Handle Profile Photo Upload
+//         if (req.files && req.files.profilePhoto) {
+//             const profilePhoto = req.files.profilePhoto[0];
+//             const profilePhotoDataUri = getDataUri(profilePhoto);
+
+//             const uploadResult = await cloudinary.uploader.upload(profilePhotoDataUri.content, {
+//                 resource_type: 'image',
+//                 folder: 'profile_photos',
+//             });
+
+//             profilePhotoUrl = uploadResult.secure_url;
+//         }
+
+//         // Handle Resume Upload
+//         if (req.files && req.files.resume) {
+//             const resume = req.files.resume[0];
+//             const resumeDataUri = getDataUri(resume);
+
+//             const uploadResult = await cloudinary.uploader.upload(resumeDataUri.content, {
+//                 resource_type: 'raw',
+//                 folder: 'resumes',
+//             });
+
+//             resumeUrl = uploadResult.secure_url;
+//         }
+
+//         // Update user profile logic (using a database model, e.g., JobSeekerModel)
+//         const updatedProfile = await JobSeeker.findByIdAndUpdate(
+//             req.id,
+//             {
+//                 fullName,
+//                 email,
+//                 phoneNumber,
+//                 bio,
+//                 experience,
+//                 skills: skills.split(',').map(skill => skill.trim()),
+//                 'profile.profilePhoto': profilePhotoUrl,
+//                 'profile.resume': resumeUrl,
+//             },
+//             { new: true }
+//         );
+
+//         res.status(200).json({ message: 'Profile updated successfully', updatedProfile });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ message: 'Error updating profile', error: error.message });
+//     }
+// };
+
+
+
+
+export const updateJobSeekerProfile = async (req, res) => {
+    try {
+      const { fullName, email, phoneNumber, bio, experience, skills } = req.body;
+  
+    
+      const currentProfile = await JobSeeker.findById(req.id);
+      if (!currentProfile) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      let profilePhotoUrl;
+      let resumeUrl;
+  
+    
+      if (req.files && req.files.profilePhoto) {
+        const profilePhoto = req.files.profilePhoto[0];
+        const profilePhotoDataUri = getDataUri(profilePhoto);
+  
+        
+        if (currentProfile.profile.photo) {
+          const oldPhotoPublicId = currentProfile.profile.photo.split('/').pop().split('.')[0]; 
+          await cloudinary.uploader.destroy(oldPhotoPublicId); 
+        }
+  
+    
+        const uploadResult = await cloudinary.uploader.upload(profilePhotoDataUri.content, {
+          resource_type: 'image',
+          folder: 'profile_photos',
         });
-    } catch (error) {
-        res.status(500).json({ message: 'Error updating profile', error: error.message });
-    }
-};
+  
+        
+        profilePhotoUrl = uploadResult.secure_url;
+      }
+  
 
+      if (req.files && req.files.resume) {
+        const resume = req.files.resume[0];
+        const resumeDataUri = getDataUri(resume);
+  
+        // If there is an existing resume, delete it from Cloudinary
+        if (currentProfile.profile.resume) {
+          const oldResumePublicId = currentProfile.profile.resume.split('/').pop().split('.')[0]; // Extract the public ID from URL
+          await cloudinary.uploader.destroy(oldResumePublicId); // Delete the old resume from Cloudinary
+        }
+  
+        // Upload the new resume to Cloudinary
+        const uploadResult = await cloudinary.uploader.upload(resumeDataUri.content, {
+          resource_type: 'raw',
+          folder: 'resumes',
+        });
+  
+        // Store the new Cloudinary URL for the resume
+        resumeUrl = uploadResult.secure_url;
+      }
+  
+      // Update the JobSeeker profile with the new data
+      const updatedProfile = await JobSeeker.findByIdAndUpdate(
+        req.id, // Assuming `req.id` contains the job seeker ID
+        {
+          fullName,
+          email,
+          phoneNumber,
+          bio,
+          experience,
+          skills: skills.split(',').map(skill => skill.trim()), // Split and trim skills
+          'profile.profilePhoto': profilePhotoUrl || currentProfile.profile.photo, // If no new photo, retain old photo
+          'profile.resume': resumeUrl || currentProfile.profile.resume, // If no new resume, retain old resume
+        },
+        { new: true } // To return the updated document
+      );
+  
+      // Respond with the updated profile data
+      res.status(200).json({
+        message: 'Profile updated successfully',
+        updatedProfile,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        message: 'Error updating profile',
+        error: error.message,
+      });
+    }
+  };

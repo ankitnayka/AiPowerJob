@@ -31,10 +31,10 @@ export const jobSeekerApi = createApi({
     }),
 
     updateProfile: builder.mutation({
-      query: (inputData) => ({
+      query: (formData) => ({
         url: "updateprofile",
         method: "PUT",
-        body: inputData,
+        body: formData,
       }),
     }),
 

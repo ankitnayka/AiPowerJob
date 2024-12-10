@@ -17,7 +17,7 @@ import {  toast } from 'react-toastify';
 const Signup = () => {
 
     const [inputData,setInputData]=useState({
-        name:"",
+        fullName:"",
         email:"",
         password:"",
         phoneNumber:""
@@ -59,8 +59,8 @@ const Signup = () => {
                                 <Label htmlFor="username">Username</Label>
                                 <Input id="username" placeholder="ankit@gmail.com"
                                     type="text"
-                                    name="name"
-                                    value={inputData.name}
+                                    name="fullName"
+                                    value={inputData.fullName}
                                     onChange={onChangeHandler}
                                     />
                             </div>
@@ -75,7 +75,7 @@ const Signup = () => {
                                     />
                             </div>
                             <div className="flex flex-col space-y-1.5">
-                                <Label htmlFor="email">email</Label>
+                                <Label htmlFor="email">Phone number</Label>
                                 <Input id="email" placeholder="ankitnaykaa0207@"
                                     type="number"
                                     name="phoneNumber"

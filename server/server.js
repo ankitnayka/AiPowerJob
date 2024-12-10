@@ -4,6 +4,8 @@ import cors from "cors";
 import connectDB from "./config/db.js";
 import cookieParser from "cookie-parser";
 
+
+
 // // Routes
 import jobSeekerRoutes from "./routes/jobSeeker.route.js";
 
@@ -21,11 +23,13 @@ app.use(
 );
 app.use(express.json());
 
-// Database Connection
+
+// Database serConnection
 connectDB();
 
 // Routes
 app.use("/api/v1/jobseeker", jobSeekerRoutes);
+
 
 
 const PORT = process.env.PORT || 5000;

@@ -15,46 +15,66 @@ import { useSelector } from "react-redux";
 import { useUpdateProfileMutation } from "@/features/api/jobSeekerapi";
 import { toast } from "react-toastify";
 
-const UpdateProfile = ({ open, setOpen ,refetch}) => {
-    
-    
-    const jobSeeker=useSelector((state)=>state.jobSeeker.jobSeeker)
+const UpdateProfile = ({ open, setOpen, refetch }) => {
+    const jobSeeker = useSelector((state) => state.jobSeeker.jobSeeker);
 
     const [inputData, setInputData] = useState({
-        name: jobSeeker?.name,
+        fullName: jobSeeker?.fullName,
+        phoneNumber: jobSeeker?.phoneNumber,
         email: jobSeeker?.email,
-        skills: jobSeeker?.profile?.skills,
+        skills: jobSeeker?.profile?.skills?.join(", "),  // Ensure skills are shown as a string
         bio: jobSeeker?.profile?.bio,
         experience: jobSeeker?.profile?.experience
     });
-    const [updateProfile,{data,isLoading,isSuccess,error}]=useUpdateProfileMutation()
 
+    const [resume, setResume] = useState(null);
+    const [profilePhoto, setProfilePhoto] = useState(null);
 
+    const [updateProfile, { data, isLoading, isSuccess, error }] = useUpdateProfileMutation();
 
-    useEffect(()=>{
-        if(isSuccess){
-            toast.success(data?.message || "Update Profile Details successfully ")
-            refetch()
+    useEffect(() => {
+        if (isSuccess) {
+            toast.success(data?.message || "Profile updated successfully");
+            refetch();
             setOpen(false);
         }
-        
-        if(error){
-            toast.error(error?.message || "Somthing wrong  ")
-            
+
+        if (error) {
+            toast.error(error?.message || "Something went wrong");
         }
-    },[isSuccess,error])
+    }, [isSuccess, error]);
 
     const onChangeHandler = (e) => {
         const { name, value } = e.target;
         setInputData({ ...inputData, [name]: value });
     };
-    
-    const onSubmit = async() => {
+
+    const onChangeFileHandler = (e) => {
+        const { name, files } = e.target;
+        if (name === "resume") {
+            setResume(files[0]);
+        } else if (name === "profilePhoto") {
+            setProfilePhoto(files[0]);
+        }
+    };
+
+    const onSubmit = async (e) => {
+        e.preventDefault();
         
-        console.log(inputData);
-        
-       await updateProfile(inputData)  
-        // Close dialog after submitting
+        const { fullName, email, skills, bio, phoneNumber,experience } = inputData;
+        const formData = new FormData();
+
+        formData.append("fullName", fullName);
+        formData.append("phoneNumber", phoneNumber);
+        formData.append("email", email);
+        formData.append("bio", bio);
+        formData.append("experience", experience);
+        formData.append("skills", skills.split(",").map((skill) => skill.trim()));  // Convert string to array
+
+        if (resume) formData.append("resume", resume);
+        if (profilePhoto) formData.append("profilePhoto", profilePhoto);
+
+        await updateProfile(formData);
     };
 
     return (
@@ -64,7 +84,7 @@ const UpdateProfile = ({ open, setOpen ,refetch}) => {
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px] bg-black text-white">
                 <DialogHeader>
-                    <DialogTitle> Edit Profile</DialogTitle>
+                    <DialogTitle>Edit Profile</DialogTitle>
                     <DialogDescription>
                         Make changes to your profile here. Click save when you're done.
                     </DialogDescription>
@@ -77,10 +97,10 @@ const UpdateProfile = ({ open, setOpen ,refetch}) => {
                         <Input
                             id="name"
                             className="col-span-3"
-                            name="name"
+                            name="fullName"
                             type="text"
                             onChange={onChangeHandler}
-                            value={inputData.name}
+                            value={inputData.fullName}
                         />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
@@ -97,6 +117,19 @@ const UpdateProfile = ({ open, setOpen ,refetch}) => {
                         />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="skills" className="text-right">
+                            Phone number
+                        </Label>
+                        <Input
+                            id="skills"
+                            className="col-span-3"
+                            name="phoneNumber"
+                            type="number"
+                            onChange={onChangeHandler}
+                            value={inputData.phoneNumber}
+                        />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="bio" className="text-right">
                             Bio
                         </Label>
@@ -110,11 +143,11 @@ const UpdateProfile = ({ open, setOpen ,refetch}) => {
                         />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="experience" className="text-right">
+                        <Label htmlFor="skills" className="text-right">
                             Skills
                         </Label>
                         <Input
-                            id="experience"
+                            id="skills"
                             className="col-span-3"
                             name="skills"
                             type="text"
@@ -133,6 +166,30 @@ const UpdateProfile = ({ open, setOpen ,refetch}) => {
                             type="text"
                             onChange={onChangeHandler}
                             value={inputData.experience}
+                        />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="resume" className="text-right">
+                            Upload Resume (PDF)
+                        </Label>
+                        <Input
+                            id="resume"
+                            className="col-span-3"
+                            name="resume"
+                            type="file"
+                            onChange={onChangeFileHandler}
+                        />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="profilePhoto" className="text-right">
+                            Profile Photo
+                        </Label>
+                        <Input
+                            id="profilePhoto"
+                            className="col-span-3"
+                            name="profilePhoto"
+                            type="file"
+                            onChange={onChangeFileHandler}
                         />
                     </div>
                 </div>

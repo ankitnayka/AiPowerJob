@@ -1,6 +1,7 @@
 // controllers/jobController.js
 import Job from '../models/Job.js';
 
+
 // Create Job (Only accessible to employers)
 export const createJob = async (req, res) => {
   try {
@@ -53,3 +54,6 @@ export const getAllJobs = async (req, res) => {
     });
   }
 };
+
+
+
