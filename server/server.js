@@ -6,8 +6,10 @@ import cookieParser from "cookie-parser";
 
 
 
+
 // // Routes
 import jobSeekerRoutes from "./routes/jobSeeker.route.js";
+import employerRoutes from './routes/employer.route.js'
 
 dotenv.config();
 const app = express();
@@ -29,6 +31,7 @@ connectDB();
 
 // Routes
 app.use("/api/v1/jobseeker", jobSeekerRoutes);
+app.use("/api/v1/employer", employerRoutes);
 
 
 

@@ -15,7 +15,7 @@ import {  toast } from 'react-toastify';
 import { Link } from "react-router-dom";
 
 
-const Signup = () => {
+const EmployerSignup = () => {
 
     const [inputData,setInputData]=useState({
         fullName:"",
@@ -50,8 +50,8 @@ const Signup = () => {
         <div className="flex flex-col justify-center items-center my-4">
             <Card className="w-[350px]">
                 <CardHeader>
-                    <CardTitle>Create Account  </CardTitle>
-                    <CardDescription>Best platform for searchin job</CardDescription>
+                    <CardTitle>Create Account(Company)  </CardTitle>
+                    <CardDescription>Best platform for Hirring Employe</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <form>
@@ -98,15 +98,16 @@ const Signup = () => {
                     </form>
                 </CardContent>
                 <CardFooter className="flex justify-center">
-                    <Button onClick={onSubmit} >Sign up  </Button>  
+                    <Button onClick={onSubmit} >Sign up  </Button>
+                    
                 </CardFooter>
                 <CardFooter>
-                    <Link to="/employerSignup"
+                    <Link to="/signup"
                      className="w-full">
                     <Button 
-                     className="w-full text-yellow-400"  >
+                     className="w-full"  >
                         
-                        click here to As Employer Sign up  </Button>  
+                        click here to As Job Seeker Sign up  </Button>  
                          </Link>
                 </CardFooter>
             </Card>
@@ -115,4 +116,4 @@ const Signup = () => {
 }
 
 
-export default Signup
+export default EmployerSignup

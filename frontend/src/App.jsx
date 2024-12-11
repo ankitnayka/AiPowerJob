@@ -6,6 +6,7 @@ import Layout from "./components/Layout"
 import Signup from "./components/auth/jobsekeer/Signup"
 import Profile from "./components/jobseeker/JobSeekerDetails"
 import JobSeekerDetails from "./components/jobseeker/JobSeekerDetails"
+import EmployerSignup from "./components/auth/employer/EmployerSignup"
 
 
 const appRouter=createBrowserRouter([
@@ -29,6 +30,11 @@ const appRouter=createBrowserRouter([
         path:"/profile",
         element:<JobSeekerDetails/>
       },
+      //Employer Sign up & Log in 
+      {
+        path:"/employerSignup",
+        element:<EmployerSignup/>
+      }
       
     ]
   }
