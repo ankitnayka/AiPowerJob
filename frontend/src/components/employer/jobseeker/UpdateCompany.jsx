@@ -8,41 +8,48 @@ import {
     DialogTrigger,
     DialogFooter
 } from "@/components/ui/dialog";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { useSelector } from "react-redux";
-import { useUpdateProfileMutation } from "@/features/api/jobSeekerapi";
-import { toast } from "react-toastify";
 
-const UpdateProfile = ({ open, setOpen, refetch }) => {
-    const jobSeeker = useSelector((state) => state.jobSeeker.jobSeeker);
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { Label } from "@radix-ui/react-label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import {  useEmployerUpdateMutation } from "@/features/api/employerApi";
+import { setEmployer } from "@/redux/employerSlice";
+
+const UpdateCompany = ({ open, setOpen, refetch }) => {
+    const employer = useSelector((state) => state.employer.employer);
+
+    const dispacth=useDispatch()
 
     const [inputData, setInputData] = useState({
-        fullName: jobSeeker?.fullName,
-        phoneNumber: jobSeeker?.phoneNumber,
-        email: jobSeeker?.email,
-        skills: jobSeeker?.profile?.skills?.join(", "),  // Ensure skills are shown as a string
-        bio: jobSeeker?.profile?.bio,
-        experience: jobSeeker?.profile?.experience
+        companyName: employer?.companyName,
+        email: employer?.email,
+        companyDescrption: employer?.companyDescrption,
+        contactNumber: employer?.contactNumber,
+        location: employer?.location,
+        industry: employer?.industry
     });
 
-    const [resume, setResume] = useState(null);
-    const [profilePhoto, setProfilePhoto] = useState(null);
 
-    const [updateProfile, { data, isLoading, isSuccess, error }] = useUpdateProfileMutation();
+    const [companyLogo, setCompanyLogo] = useState(null);
+    
 
+    const [employerUpdate, { data, isSuccess, isLoading, error }] = useEmployerUpdateMutation()
     useEffect(() => {
         if (isSuccess) {
-            toast.success(data?.message || "Profile updated successfullyyyyy");
+            toast.success(data?.message || "Profile updated successfully okkk");
+            console.log(data);
+            dispacth(setEmployer(data?.employerUpdate))
             refetch();
+           
             setOpen(false);
         }
 
         if (error) {
             toast.error(error?.message || "Something went wrong");
         }
-    }, [isSuccess, error]);
+    }, [isSuccess, error,]);
 
     const onChangeHandler = (e) => {
         const { name, value } = e.target;
@@ -51,59 +58,76 @@ const UpdateProfile = ({ open, setOpen, refetch }) => {
 
     const onChangeFileHandler = (e) => {
         const { name, files } = e.target;
-        if (name === "resume") {
-            setResume(files[0]);
-        } else if (name === "profilePhoto") {
-            setProfilePhoto(files[0]);
+        if (name === "companyLogo") {
+            setCompanyLogo(files[0]);
         }
     };
 
     const onSubmit = async (e) => {
         e.preventDefault();
-        
-        const { fullName, email, skills, bio, phoneNumber,experience } = inputData;
-        const formData = new FormData();
 
-        formData.append("fullName", fullName);
-        formData.append("phoneNumber", phoneNumber);
+        const { companyName, email, contactNumber, location, industry, companyDescrption } = inputData;
+        
+        
+        const formData=new FormData()
+
+        formData.append("companyName", companyName);
+        formData.append("companyDescrption", companyDescrption);
+        formData.append("contactNumber", contactNumber);
         formData.append("email", email);
-        formData.append("bio", bio);
-        formData.append("experience", experience);
-        formData.append("skills", skills.split(",").map((skill) => skill.trim()));  // Convert string to array
+        formData.append("location", location);
+        formData.append("industry", industry);
 
-        if (resume) formData.append("resume", resume);
-        if (profilePhoto) formData.append("profilePhoto", profilePhoto);
-        console.log(formData);
+
+         formData.append("companyLogo", companyLogo);
+
+        console.log(companyLogo);
         
-        await updateProfile(formData);
+        await employerUpdate(inputData)
+
+
     };
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button className="mt-10">Edit Profile</Button>
+                <Button className="mt-10">Edit Company Details</Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px] bg-black text-white">
+            <DialogContent className="sm:max-w-[625px] bg-black text-white">
                 <DialogHeader>
-                    <DialogTitle>Edit Profile</DialogTitle>
+                    <DialogTitle>Edit Company Details</DialogTitle>
                     <DialogDescription>
-                        Make changes to your profile here. Click save when you're done.
+                        Make changes to your Dasboard here. Click save when you're done.
                     </DialogDescription>
                 </DialogHeader>
-                <div className="grid gap-8 py-4">
+                <div className="grid gap-4 ">
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="name" className="text-right">
-                            Name
+                            Company Name
                         </Label>
                         <Input
                             id="name"
                             className="col-span-3"
-                            name="fullName"
+                            name="companyName"
                             type="text"
                             onChange={onChangeHandler}
-                            value={inputData.fullName}
+                            value={inputData.companyName}
                         />
                     </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="name" className="text-right">
+                            Company Descrption
+                        </Label>
+                        <Input
+                            id="name"
+                            className="col-span-3"
+                            name="companyDescrption"
+                            type="text"
+                            onChange={onChangeHandler}
+                            value={inputData.companyDescrption}
+                        />
+                    </div>
+                   
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="email" className="text-right">
                             Email
@@ -119,80 +143,57 @@ const UpdateProfile = ({ open, setOpen, refetch }) => {
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="skills" className="text-right">
-                            Phone number
+                            Contact number
                         </Label>
                         <Input
                             id="skills"
                             className="col-span-3"
-                            name="phoneNumber"
+                            name="contactNumber"
                             type="number"
                             onChange={onChangeHandler}
-                            value={inputData.phoneNumber}
+                            value={inputData.contactNumber}
                         />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="bio" className="text-right">
-                            Bio
+                            Location
                         </Label>
                         <Input
                             id="bio"
                             className="col-span-3"
-                            name="bio"
+                            name="location"
                             type="text"
                             onChange={onChangeHandler}
-                            value={inputData.bio}
+                            value={inputData.location}
                         />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="skills" className="text-right">
-                            Skills
+                            Industry
                         </Label>
                         <Input
                             id="skills"
                             className="col-span-3"
-                            name="skills"
+                            name="industry"
                             type="text"
                             onChange={onChangeHandler}
-                            value={inputData.skills}
+                            value={inputData.industry}
                         />
                     </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="experience" className="text-right">
-                            Experience
-                        </Label>
-                        <Input
-                            id="experience"
-                            className="col-span-3"
-                            name="experience"
-                            type="text"
-                            onChange={onChangeHandler}
-                            value={inputData.experience}
-                        />
-                    </div>
+
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="resume" className="text-right">
-                            Upload Resume (PDF)
+                            Upload Logo
                         </Label>
                         <Input
                             id="resume"
                             className="col-span-3"
-                            name="resume"
+                            name="companyLogo"
                             type="file"
                             onChange={onChangeFileHandler}
                         />
                     </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="profilePhoto" className="text-right">
-                            Profile Photo
-                        </Label>
-                        <Input
-                            id="profilePhoto"
-                            className="col-span-3"
-                            name="profilePhoto"
-                            type="file"
-                            onChange={onChangeFileHandler}
-                        />
-                    </div>
+
                 </div>
                 <DialogFooter>
                     <Button onClick={onSubmit} type="submit">
@@ -204,4 +205,4 @@ const UpdateProfile = ({ open, setOpen, refetch }) => {
     );
 };
 
-export default UpdateProfile;
+export default UpdateCompany;

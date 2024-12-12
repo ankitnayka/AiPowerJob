@@ -7,6 +7,8 @@ import Signup from "./components/auth/jobsekeer/Signup"
 import Profile from "./components/jobseeker/JobSeekerDetails"
 import JobSeekerDetails from "./components/jobseeker/JobSeekerDetails"
 import EmployerSignup from "./components/auth/employer/EmployerSignup"
+import EmployerLogin from "./components/auth/employer/EmployerLogin"
+import EmployerDetails from "./components/employer/jobseeker/employerDetails"
 
 
 const appRouter=createBrowserRouter([
@@ -34,6 +36,14 @@ const appRouter=createBrowserRouter([
       {
         path:"/employerSignup",
         element:<EmployerSignup/>
+      },
+      {
+        path:"/employerLogin",
+        element:<EmployerLogin/>
+      },
+      {
+        path:"/employerDashBoard",
+        element:<EmployerDetails/>
       }
       
     ]

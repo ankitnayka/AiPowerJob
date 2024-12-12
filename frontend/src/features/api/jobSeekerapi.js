@@ -48,11 +48,11 @@ export const jobSeekerApi = createApi({
   }),
 });
 
-// Export the hooks to use the endpoints in your component
+
 export const {
   useRegisterJobseekerMutation,
   useLoginJobseekerMutation,
   useUpdateProfileMutation,
   useGetJobSeekerProfileQuery,
-  useLogoutMutation, // Updated hook
+  useLogoutMutation, 
 } = jobSeekerApi;

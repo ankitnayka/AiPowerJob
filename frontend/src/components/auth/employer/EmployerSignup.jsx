@@ -10,31 +10,35 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useRegisterJobseekerMutation } from "@/features/api/jobSeekerapi";
 import {  toast } from 'react-toastify';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useEmployerSignupMutation } from "@/features/api/employerApi";
+
 
 
 const EmployerSignup = () => {
 
     const [inputData,setInputData]=useState({
-        fullName:"",
+        companyName:"",
         email:"",
         password:"",
-        phoneNumber:""
+        contactNumber:""
     })
 
-    const [registerJobseeker,{data,isLoading,isSuccess,error}]=useRegisterJobseekerMutation()
+    const [employerSignup,{data,isSuccess,isLoading,error}] =useEmployerSignupMutation()
+    const navigate=useNavigate()
 
+console.log("Banari",data);
 
     useEffect(()=>{
         if(isSuccess){
             toast.success(data?.message || "Register SuccessFully !!!")
+            navigate("/employerLogin")
         }
         if(error){
             toast.error(error?.data?.message || "Something worng on frontned")
         }
-    },[isSuccess,isLoading,error])
+    },[isSuccess,isLoading,error,data])
 
     const onChangeHandler=(e)=>{
         const {name,value}=e.target;   
@@ -43,7 +47,7 @@ const EmployerSignup = () => {
 
     const onSubmit=()=>{
         console.log(inputData);
-        registerJobseeker(inputData)
+        employerSignup(inputData)
     }
 
     return (
@@ -57,18 +61,18 @@ const EmployerSignup = () => {
                     <form>
                         <div className="grid w-full items-center gap-2">
                             <div className="flex flex-col space-y-1.5">
-                                <Label htmlFor="username">Username</Label>
+                                <Label htmlFor="username">Company Name :</Label>
                                 <Input id="username" placeholder="ankit@gmail.com"
                                     type="text"
-                                    name="fullName"
-                                    value={inputData.fullName}
+                                    name="companyName"
+                                    value={inputData.companyName}
                                     onChange={onChangeHandler}
                                     />
                             </div>
 
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="email">email</Label>
-                                <Input id="email" placeholder="ankitnaykaa0207@"
+                                <Input id="email" placeholder="TataLtd@gmail.com"
                                     type="email"
                                     name="email"
                                 value={inputData.email}
@@ -76,10 +80,10 @@ const EmployerSignup = () => {
                                     />
                             </div>
                             <div className="flex flex-col space-y-1.5">
-                                <Label htmlFor="email">Phone number</Label>
+                                <Label htmlFor="email">Contact number</Label>
                                 <Input id="email" placeholder="ankitnaykaa0207@"
                                     type="number"
-                                    name="phoneNumber"
+                                    name="contactNumber"
                                 value={inputData.phoneNumber}
                                     onChange={onChangeHandler}
                                     />
@@ -97,9 +101,9 @@ const EmployerSignup = () => {
                         </div>
                     </form>
                 </CardContent>
-                <CardFooter className="flex justify-center">
-                    <Button onClick={onSubmit} >Sign up  </Button>
-                    
+                <CardFooter className="flex justify-center w-full flex-col">
+                    <Button className="w-full" onClick={onSubmit} >Sign up  </Button>
+                    <p>Already account <Link to="/employerLogin" className="text-blue-700 cursor-pointer hover:underline">log in </Link></p>
                 </CardFooter>
                 <CardFooter>
                     <Link to="/signup"

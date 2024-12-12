@@ -2,6 +2,7 @@ import Employer from '../models/employer.model.js'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import mongoose from 'mongoose'
+import getDataUri from '../cloudinery/datauri.js'
 
 
 export const  employerSignup=async(req,res)=>{
@@ -138,8 +139,13 @@ export const employerDetails=async(req,res)=>{
 
 export const employerUpdate=async(req,res)=>{
     const employerId=req.employerId
+    
+    
     try {
 
+        const {companyName,email,contactNumber,location,industry,companyDescrption}=req.body;
+        // console.log(req.files.companyLogo);
+        
         const employer=await Employer.findById(employerId);
         if(!employer){
             return res.status(400).json({
@@ -148,8 +154,8 @@ export const employerUpdate=async(req,res)=>{
             })
         }
 
-        const {companyName,email,contactNumber,location,industry,companyDescrption}=req.body
-        let companyLogoUrl=employer.companyLogo
+        
+        let companyLogoUrl;
         if(req.files && req.files.companyLogo){
             const companyLogo = req.files.companyLogo[0];
             const companyLogoDataUri = getDataUri(companyLogo);
@@ -166,6 +172,7 @@ export const employerUpdate=async(req,res)=>{
               
             companyLogoUrl=uploadResult.secure_url;
         }
+      
 
         if(companyName) employer.companyName=companyName
         if(companyDescrption) employer.companyDescrption=companyDescrption
@@ -175,13 +182,22 @@ export const employerUpdate=async(req,res)=>{
         if(industry) employer.industry=industry
 
         const employerUpdate=await Employer.findByIdAndUpdate(employerId,{
-                            companyName,email,contactNumber,location,industry
-                            ,companyLogo:companyLogoUrl,companyDescrption
+                            companyName,
+                            email,
+                            contactNumber,
+                            location,
+                            industry
+                            ,companyLogo:companyLogoUrl,
+                            companyDescrption,
             
         },{new:true})
 
+    console.log(employerUpdate);
+    
+
+      
         res.status(200).json({
-            message: 'Employer updated successfully',
+            message: 'Employer updated successfully Bansari',
             employerUpdate,
           });
     } catch (error) {

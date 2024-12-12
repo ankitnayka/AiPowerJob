@@ -278,7 +278,8 @@ export const updateJobSeekerProfile = async (req, res) => {
       let profilePhotoUrl;
       let resumeUrl;
   
-    
+      console.log(req.files);
+      
       if (req.files && req.files.profilePhoto) {
         const profilePhoto = req.files.profilePhoto[0];
         const profilePhotoDataUri = getDataUri(profilePhoto);

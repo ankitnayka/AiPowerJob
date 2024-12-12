@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useRegisterJobseekerMutation } from "@/features/api/jobSeekerapi";
 import {  toast } from 'react-toastify';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 const Signup = () => {
@@ -25,11 +25,15 @@ const Signup = () => {
     })
 
     const [registerJobseeker,{data,isLoading,isSuccess,error}]=useRegisterJobseekerMutation()
+console.log('data',data);
+
+    const navigate=useNavigate()
 
 
     useEffect(()=>{
         if(isSuccess){
             toast.success(data?.message || "Register SuccessFully !!!")
+            navigate("/login")
         }
         if(error){
             toast.error(error?.data?.message || "Something worng on frontned")
@@ -41,9 +45,9 @@ const Signup = () => {
         setInputData({...inputData,[name]:value})     
     }
 
-    const onSubmit=()=>{
+    const onSubmit=async()=>{
         console.log(inputData);
-        registerJobseeker(inputData)
+       await registerJobseeker(inputData)
     }
 
     return (
@@ -97,8 +101,9 @@ const Signup = () => {
                         </div>
                     </form>
                 </CardContent>
-                <CardFooter className="flex justify-center">
-                    <Button onClick={onSubmit} >Sign up  </Button>  
+                <CardFooter className="flex justify-center w-full flex-col">
+                    <Button className="w-full" onClick={onSubmit} >Sign up  </Button>  
+                    <p>Already Acocunt  <Link to="/login" className="text-blue-600 hover:underline cursor-pointer">Login  as jobSeeker</Link></p>
                 </CardFooter>
                 <CardFooter>
                     <Link to="/employerSignup"

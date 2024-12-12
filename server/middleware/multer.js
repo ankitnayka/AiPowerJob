@@ -9,6 +9,7 @@ const upload = multer({
 }).fields([
     { name: 'profilePhoto', maxCount: 1 },
     { name: 'resume', maxCount: 1 },
+    { name: 'companyLogo', maxCount: 1 },
 ]);
 
 
