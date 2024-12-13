@@ -4,7 +4,7 @@ import Jobs from '../models/Jobs.js';
 
 export const createJob = async (req, res) => {
   try {
-    const { jobTitle, description, location, salary } = req.body;
+    const { jobTitle, jobDescription, location, salary } = req.body;
 
     const employerId=req.employerId;
     if (!jobTitle ) {
@@ -16,7 +16,7 @@ export const createJob = async (req, res) => {
 
     const newJob = new Jobs({
       jobTitle,
-      description,
+      jobDescription,
       location,
       salary,
       employer: employerId, 

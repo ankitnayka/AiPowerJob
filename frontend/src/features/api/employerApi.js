@@ -44,14 +44,32 @@ export const employerApi = createApi({
             query: () => ({
                 url: "/getAllJobs",
                 method: "GET"
-            })
+            }),
+            providesTags: ['EmployerViewJobs'],
         }),
         jobUpdateDetails:builder.mutation({
             query:({id,inputData})=>({
                 url:`/jobs/${id}`,
                 method:"PUT",
                 body:inputData
-            })
+            }),
+            invalidatesTags: ['EmployerViewJobs'],
+        }),
+        addNewJob:builder.mutation({
+            query:(inputData)=>({
+                url:"/jobPost",
+                method:"POST",
+                body:inputData
+            }),
+            invalidatesTags: ['EmployerViewJobs'],
+        }),
+        deleteJob:builder.mutation({
+            query:(id)=>({
+                url:`/jobs/${id}`,
+                method:"DELETE",
+                
+            }),
+            invalidatesTags: ['EmployerViewJobs'],
         })
 
 
@@ -64,5 +82,7 @@ export const { useEmployerSignupMutation,
     useEmployerUpdateMutation,
     useEmployerLogoutMutation,
     useEmployerViewJobsQuery,
-    useJobUpdateDetailsMutation
+    useJobUpdateDetailsMutation,
+    useAddNewJobMutation,
+    useDeleteJobMutation
 } = employerApi

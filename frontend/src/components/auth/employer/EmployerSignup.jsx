@@ -51,7 +51,7 @@ console.log("Banari",data);
     }
 
     return (
-        <div className="flex flex-col justify-center items-center my-4">
+        <div className="flex flex-col mt-24 justify-center items-center my-4">
             <Card className="w-[350px]">
                 <CardHeader>
                     <CardTitle>Create Account(Company)  </CardTitle>

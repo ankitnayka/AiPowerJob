@@ -4,7 +4,7 @@ import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
 
 const EmployerOverview = () => {
     return (
-        <div className="max-w-7xl flex gap-8 my-10 ">
+        <div className="max-w-7xl mt-24 flex gap-8 my-10 ">
             <div className="w-1/3 hover:drop-shadow-lg">
                 <Card>
                     <CardHeader className="flex flex-col items-center">

@@ -12,19 +12,20 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useSelector } from "react-redux";
-import { useUpdateProfileMutation } from "@/features/api/jobSeekerapi";
+import { useGetJobSeekerProfileQuery, useUpdateProfileMutation } from "@/features/api/jobSeekerapi";
 import { toast } from "react-toastify";
 
 const UpdateProfile = ({ open, setOpen, refetch }) => {
-    const jobSeeker = useSelector((state) => state.jobSeeker.jobSeeker);
+    // const jobSeeker = useSelector((state) => state.jobSeeker.jobSeeker);
+    const { data:updateData } = useGetJobSeekerProfileQuery();
 
     const [inputData, setInputData] = useState({
-        fullName: jobSeeker?.fullName,
-        phoneNumber: jobSeeker?.phoneNumber,
-        email: jobSeeker?.email,
-        skills: jobSeeker?.profile?.skills?.join(", "),  // Ensure skills are shown as a string
-        bio: jobSeeker?.profile?.bio,
-        experience: jobSeeker?.profile?.experience
+        fullName: updateData?.fullName,
+        phoneNumber: updateData?.phoneNumber,
+        email: updateData?.email,
+        skills: updateData?.profile?.skills?.join(", "),  // Ensure skills are shown as a string
+        bio: updateData?.profile?.bio,
+        experience: updateData?.profile?.experience
     });
 
     const [resume, setResume] = useState(null);

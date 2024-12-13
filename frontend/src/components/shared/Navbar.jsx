@@ -41,7 +41,7 @@ const NavBar = () => {
   }, [isSuccess, error, data, reset, navigate]);
 
   return (
-    <nav className="bg-white shadow-md px-6 py-4  flex items-center justify-between">
+    <nav className="fixed top-0 left-0 right-0 z-30 bg-white  shadow-md px-6 py-4  flex items-center justify-between">
       {/* Logo */}
       <Link to="/" className="flex items-center">
         <img

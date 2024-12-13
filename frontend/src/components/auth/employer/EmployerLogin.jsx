@@ -55,7 +55,7 @@ const EmployerLogin = () => {
       await  employerLogin(inputData)
     }
     return (
-        <div className="flex flex-col justify-center items-center my-4">
+        <div className="flex flex-col mt-24 justify-center items-center my-4">
             <Card className="w-[350px]">
                 <CardHeader>
                     <CardTitle>Log in as <span className="underline text-red-700 font-bold">Company</span>  </CardTitle>

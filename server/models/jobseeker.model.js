@@ -10,9 +10,9 @@ const jobSeekerSchema = new mongoose.Schema({
         unique: true
     },
     profile: {
-        skills: [String],
+        skills: [{type:String}],
         experience: Number,
-        bio :String,
+        bio :{type: String},
         resume :{type:String} ,//URL to resume file
         resumeOriginalName:{type:String},
         company:{type:mongoose.Schema.Types.ObjectId,ref:'Company'},
@@ -23,7 +23,8 @@ const jobSeekerSchema = new mongoose.Schema({
     },
     resetPasswordToken: String,
     resetPasswordExpires: Date, // The token expiration time
-},{timestamps:true});
+}
+,{timestamps:true});
 
 const JobSeeker = mongoose.model('JobSeeker', jobSeekerSchema);
 export default JobSeeker;

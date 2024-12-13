@@ -29,7 +29,7 @@ const EmployerDashboard = () => {
 
     return (
         <div>
-            <div className="w-1/5 bg-[#2c3e50] text-white h-screen fixed drop-shadow-xl">
+            <div className="w-1/5 bg-[#2c3e50] mt-20 text-white h-screen fixed drop-shadow-xl">
                 <h1 className="font-bold p-4 text-2xl  text-white mb-12 ">Employer DashBoard</h1>
                 <div className="">
                     <Link to="/employerDashBoard/employerOverview">      <h4 className=" ml-2   p-3 text-xl  hover:bg-[#34495e] ">Overview</h4> </Link>

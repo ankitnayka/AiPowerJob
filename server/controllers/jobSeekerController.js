@@ -269,6 +269,7 @@ export const updateJobSeekerProfile = async (req, res) => {
     try {
       const { fullName, email, phoneNumber, bio, experience, skills } = req.body;
   
+    console.log("Skills",skills);
     
       const currentProfile = await JobSeeker.findById(req.id);
       if (!currentProfile) {
@@ -278,7 +279,7 @@ export const updateJobSeekerProfile = async (req, res) => {
       let profilePhotoUrl;
       let resumeUrl;
   
-      console.log(req.files);
+    
       
       if (req.files && req.files.profilePhoto) {
         const profilePhoto = req.files.profilePhoto[0];
@@ -328,8 +329,9 @@ export const updateJobSeekerProfile = async (req, res) => {
           fullName,
           email,
           phoneNumber,
-          bio,
-          experience,
+        'profile.bio':bio,
+        'profile.skills': skills.split(',').map(skill => skill.trim()),
+          'profile.experience':experience,
           skills: skills.split(',').map(skill => skill.trim()), // Split and trim skills
           'profile.profilePhoto': profilePhotoUrl || currentProfile.profile.photo, // If no new photo, retain old photo
           'profile.resume': resumeUrl || currentProfile.profile.resume, // If no new resume, retain old resume
