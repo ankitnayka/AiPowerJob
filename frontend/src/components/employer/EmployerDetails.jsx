@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import UpdateCompany from './UpdateCompany';
 import { useEmployerDashBoardQuery } from '@/features/api/employerApi';
 import { useSelector } from 'react-redux';
+import UpdateCompany from './UpdateCompany';
 
 const EmployerDetails = () => {
   const [open, setOpen] = useState(false);
@@ -21,7 +21,7 @@ const EmployerDetails = () => {
 
 
   return (
-    <div className="max-w-4xl mx-auto mt-8 bg-white shadow-md rounded-lg p-6">
+    <div className="max-w-7xl  mx-auto mt-8 bg-white shadow-md rounded-lg p-6">
       <h2 className="text-2xl font-bold text-gray-800 mb-6">Company  Details</h2>
 
       

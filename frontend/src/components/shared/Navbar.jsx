@@ -22,7 +22,7 @@ const NavBar = () => {
   const handleLogout = async () => {
     try {
       await logout().unwrap(); // Call the API
-      dispatch(logoutJobSeeker()); // Update Redux state
+      dispatch(logoutJobSeeker()); // Update Red
     } catch (err) {
       console.error("Logout error:", err);
     }
@@ -41,7 +41,7 @@ const NavBar = () => {
   }, [isSuccess, error, data, reset, navigate]);
 
   return (
-    <nav className="bg-white shadow-md px-6 py-4 flex items-center justify-between">
+    <nav className="bg-white shadow-md px-6 py-4  flex items-center justify-between">
       {/* Logo */}
       <Link to="/" className="flex items-center">
         <img

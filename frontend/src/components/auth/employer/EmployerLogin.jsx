@@ -38,7 +38,7 @@ const EmployerLogin = () => {
     
             console.log("data is ",data);
 
-            navigate("/employerDashBoard")
+            navigate("/employerDashBoard/employerDetails")
         }
         if(error){
             toast.error(error?.data?.message || "Something worng on frontned")

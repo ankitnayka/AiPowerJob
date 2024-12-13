@@ -13,9 +13,13 @@ const employerSlice=createSlice({
         setEmployer:(state,action)=>{
             state.employer=action.payload,
             state.isAuthenticated = true;
+        },
+        logoutEmployer:(state,action)=>{
+            state.employer=null,
+            state.isAuthenticated = false;
         }
     }
 })
 
-export const {setEmployer}=employerSlice.actions
+export const {setEmployer,logoutEmployer}=employerSlice.actions
 export default employerSlice.reducer

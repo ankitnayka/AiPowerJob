@@ -8,44 +8,67 @@ import Profile from "./components/jobseeker/JobSeekerDetails"
 import JobSeekerDetails from "./components/jobseeker/JobSeekerDetails"
 import EmployerSignup from "./components/auth/employer/EmployerSignup"
 import EmployerLogin from "./components/auth/employer/EmployerLogin"
-import EmployerDetails from "./components/employer/jobseeker/employerDetails"
+import EmployerDetails from "./components/employer/EmployerDetails"
+import EmployerDashboard from "./components/employer/EmployerDashboard"
+import EmployerOverview from "./components/employer/EmployerOverview"
+import ViewJobsPost from "./components/employer/jobManage/ViewJobsPost"
+import UpdateJob from "./components/employer/jobManage/UpdateJob"
 
 
-const appRouter=createBrowserRouter([
+const appRouter = createBrowserRouter([
   {
-    path:"/",
-    element:<Layout/>,
-    children:[
+    path: "/",
+    element: <Layout />,
+    children: [
       {
-        path:"/",
-        element:<Home/>
+        path: "/",
+        element: <Home />
       },
       {
-        path:"/login",
-        element:<Login/>
+        path: "/login",
+        element: <Login />
       },
       {
-        path:"/signup",
-        element:<Signup/>
+        path: "/signup",
+        element: <Signup />
       },
       {
-        path:"/profile",
-        element:<JobSeekerDetails/>
+        path: "/profile",
+        element: <JobSeekerDetails />
       },
       //Employer Sign up & Log in 
       {
-        path:"/employerSignup",
-        element:<EmployerSignup/>
+        path: "/employerSignup",
+        element: <EmployerSignup />
       },
       {
-        path:"/employerLogin",
-        element:<EmployerLogin/>
+        path: "/employerLogin",
+        element: <EmployerLogin />
       },
       {
-        path:"/employerDashBoard",
-        element:<EmployerDetails/>
-      }
-      
+        path: "/employerDashBoard",
+        element: <EmployerDashboard />,
+        children: [
+          {
+            path: "employerDetails",
+            element: <EmployerDetails />,
+          },
+          {
+            path:"employerOverview",
+            element:<EmployerOverview/>
+          },
+          {
+            path:"employerViewJobsPost",
+            element:<ViewJobsPost/>
+          },
+          {
+            path:"employerViewJobsPost/:id",
+            element:<UpdateJob/>
+          }
+        ]
+      },
+
+
     ]
   }
 ])
@@ -53,7 +76,7 @@ const appRouter=createBrowserRouter([
 function App() {
 
   return (
-   <RouterProvider router={appRouter} />
+    <RouterProvider router={appRouter} />
   )
 }
 

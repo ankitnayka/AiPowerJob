@@ -26,18 +26,43 @@ export const employerApi = createApi({
                 method: "GET",
             })
         }),
-        employerUpdate:builder.mutation({
-            query:(formData)=>({
-                url:"/employerUpdate",
+        employerUpdate: builder.mutation({
+            query: (formData) => ({
+                url: "/employerUpdate",
+                method: "PUT",
+                body: formData
+            })
+        }),
+        employerLogout: builder.mutation({
+            query: () => ({
+                url: "/employerLogout",
+                method: "GET"
+            })
+        }),
+        //job manage
+        employerViewJobs: builder.query({
+            query: () => ({
+                url: "/getAllJobs",
+                method: "GET"
+            })
+        }),
+        jobUpdateDetails:builder.mutation({
+            query:({id,inputData})=>({
+                url:`/jobs/${id}`,
                 method:"PUT",
-                body:formData
+                body:inputData
             })
         })
+
+
     })
 })
 
 export const { useEmployerSignupMutation,
-     useEmployerLoginMutation ,
+    useEmployerLoginMutation,
     useEmployerDashBoardQuery,
-    useEmployerUpdateMutation
-    } = employerApi
+    useEmployerUpdateMutation,
+    useEmployerLogoutMutation,
+    useEmployerViewJobsQuery,
+    useJobUpdateDetailsMutation
+} = employerApi
