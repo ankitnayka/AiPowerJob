@@ -8,6 +8,7 @@ import {
 } from '../controllers/jobSeekerController.js';
 import isAuthenticated from '../middleware/isAuthenticated.js';
 import { upload } from '../middleware/multer.js';
+import { applyJob } from '../controllers/applyJob.js';
 
 
 const router = express.Router();
@@ -30,6 +31,8 @@ router.get('/profile', isAuthenticated, getJobSeekerProfile);
 //   uploadToCloudinary,  // Use the Cloudinary upload middleware
 //   updateJobSeekerProfile
 // );
-router.put('/updateprofile', upload,isAuthenticated,  updateJobSeekerProfile)
+router.put('/updateprofile', upload,isAuthenticated,  updateJobSeekerProfile);
+
+router.post('/applyJob/:jobId',isAuthenticated,upload,applyJob)
 
 export default router;

@@ -45,6 +45,13 @@ export const jobSeekerApi = createApi({
         method: "GET",
       }),
     }),
+    applyJob:builder.mutation({
+      query:({jobId,formDataObj})=>({
+        url:`/applyJob/${jobId}`,
+        method:"POST",
+        body:formDataObj
+      })
+    })
   }),
 });
 
@@ -55,4 +62,5 @@ export const {
   useUpdateProfileMutation,
   useGetJobSeekerProfileQuery,
   useLogoutMutation, 
+  useApplyJobMutation
 } = jobSeekerApi;

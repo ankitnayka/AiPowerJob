@@ -30,13 +30,18 @@ import { toast } from "react-toastify";
 
 const ViewJobsPost = () => {
 
-    const { data, refetch } = useEmployerViewJobsQuery()
+  
+   
+    
     //RTK QUERY for add new job
     const [addNewJob, { data: newJobData, isLoading, isSuccess, error }] = useAddNewJobMutation()
 
     //RTK QUERY of delete job
     const [deleteJob, { data: deletedata, isSuccess: deleteSuccess, error: deleteError }] = useDeleteJobMutation()
     const navigate = useNavigate()
+    const { data, refetch } = useEmployerViewJobsQuery()
+    // const jobs = Array.isArray(data) ? data : [];
+    console.log(data);
 
     useEffect(() => {
         if (isSuccess) {
@@ -44,7 +49,7 @@ const ViewJobsPost = () => {
 
         }
         if (deleteSuccess) {
-            toast.success(deleteSuccess.message || " job delete!!")
+            toast.success(deletedata.message || " job delete!!")
         }
         if (deleteError) {
 
@@ -80,6 +85,11 @@ const ViewJobsPost = () => {
             console.log(id);
             refetch()
         }
+
+    }
+    const handleJobApplication=(jobId)=>{
+        // navigate(`jobApplication/${jobId}`)
+        navigate(`/employerDashBoard/jobApplication/${jobId}`);
 
     }
     return (
@@ -151,13 +161,21 @@ const ViewJobsPost = () => {
                 </TableHeader>
                 <TableBody>
                     {
-                        data?.map((job, index) => (<>
+                        data?.jobs.map((job, index) => (
+                            <>
                             <TableRow key={index}>
                                 <TableCell className=" ">{job?.jobTitle}</TableCell>
                                 <TableCell>{job?.location}</TableCell>
                                 <TableCell>{job?.status || "NA"}</TableCell>
                                 <TableCell >2-july-2024</TableCell>
-                                <TableCell >{data?.numberofApplicant?.length}</TableCell>
+                                <TableCell
+                                onClick={()=>handleJobApplication(job._id)}
+                                >{
+                                    job?.numberofApplicant?.length>0 ? 
+                                   (<> {job.numberofApplicant.length} <span className="font-semibold">application</span> </> )
+                                     :
+                                    "NA"
+                                    } </TableCell>
                                 <TableCell className="flex gap-2 justify-center items-center space-x-2">
                                     <Edit className="text-blue-700"
                                         onClick={() => navigate(`${job._id}`)}
@@ -168,7 +186,8 @@ const ViewJobsPost = () => {
                                         className="text-red-700" />
                                 </TableCell>
                             </TableRow>
-                        </>))
+                            </>
+                        ))
 
                     }
                 </TableBody>

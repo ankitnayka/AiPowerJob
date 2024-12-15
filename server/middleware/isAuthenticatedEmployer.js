@@ -6,7 +6,7 @@ dotenv.config();
 
 const isAuthenticateEmployer=async(req,res,next)=>{
     try {
-        const token=req.cookies.token
+        const token=req.cookies.employerToken
         if (!token) {
             return res.status(401).json({
                 message: "User not authorized! Token missing.",

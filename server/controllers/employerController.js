@@ -3,7 +3,8 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import mongoose from 'mongoose'
 import getDataUri from '../cloudinery/datauri.js'
-
+import Jobs from '../models/Jobs.js'
+import Application from '../models/Application.js'
 
 export const  employerSignup=async(req,res)=>{
     try {
@@ -85,7 +86,7 @@ export const employerLogin=async(req,res)=>{
             {expiresIn:'1d'})
 
 
-            res.status(200).cookie("token", token, {
+            res.status(200).cookie("employerToken", token, {
                 httpOnly: true,
                 sameSite: 'strict',
                 maxAge: 24 * 60 * 60 * 1000
@@ -122,6 +123,8 @@ export const employerLogout=async(req,res)=>{
 
 export const employerDetails=async(req,res)=>{
     const employerId=req.employerId
+    console.log("detailsCompany",employerId);
+    
     try {
         const employer=await Employer.findById(employerId)
 
@@ -208,3 +211,30 @@ export const employerUpdate=async(req,res)=>{
         })
     }
 }
+
+export const getApplicationsForJob = async (req, res) => {
+    try {
+        const { jobId } = req.params;
+        // const employerId = req.id; 
+        const employer=req.employerId
+    
+    
+        const job = await Jobs.findOne({ _id: jobId, employer });
+        console.log("employer job",job);
+        
+        if (!job) {
+            return res.status(403).json({ message: "You are not authorized to view these applications." });
+        }
+
+        // Fetch all applications for the job
+        const applications = await Application.find({ jobId }).select('-__v'); // Exclude __v for cleaner data
+
+        return res.status(200).json({ 
+            message: "Applications fetched successfully.",
+            applications,
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Internal Server Error." });
+    }
+};

@@ -1,7 +1,7 @@
 import JobSeeker from '../models/jobseeker.model.js'
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import cloudinary from '../cloudinery/cloudinery.js'
+import cloudinary from '../cloudinery/cloudinary.js'
 import getDataUri from '../cloudinery/datauri.js';
 
 

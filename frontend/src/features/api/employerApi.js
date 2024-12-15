@@ -70,7 +70,26 @@ export const employerApi = createApi({
                 
             }),
             invalidatesTags: ['EmployerViewJobs'],
+        }),
+        getAllJobsJobseeker:builder.query({
+            query:()=>({
+                url:"/jobsForJobSeeker",
+                method:"GET"
+            })
+        }),
+        getSingleJobDescription:builder.query({
+            query:(jobId)=>({
+                url:`/jobdescription/${jobId}`,
+                method:"GET"
+            })
+        }),
+        getJobApplication:builder.query({
+            query:(jobId)=>({
+                url:`/jobApplication/${jobId}`,
+                method:"GET"
+            })
         })
+        
 
 
     })
@@ -84,5 +103,8 @@ export const { useEmployerSignupMutation,
     useEmployerViewJobsQuery,
     useJobUpdateDetailsMutation,
     useAddNewJobMutation,
-    useDeleteJobMutation
+    useDeleteJobMutation,
+    useGetAllJobsJobseekerQuery,
+    useGetSingleJobDescriptionQuery,
+    useGetJobApplicationQuery
 } = employerApi

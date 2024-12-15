@@ -22,44 +22,48 @@ import { toast } from "react-toastify";
 import { useEmployerViewJobsQuery, useJobUpdateDetailsMutation } from "@/features/api/employerApi";
 
 const UpdateJob = () => {
+    const { data: updateData } = useEmployerViewJobsQuery();
     const params = useParams();
     const id = params.id;
-
+   
+    console.log("update data",updateData);
     
-    const { data: updateData } = useEmployerViewJobsQuery();
-
-    const jobDetails = updateData?.find((job) => job._id === id);
-
+    const jobDetails = updateData?.jobs?.find((job) => job._id === id);
+  
+  
+  
     const [inputData, setInputData] = useState({
         jobTitle: "",
         jobDescription: "",
+        jobType: "",
         location: "",
         datePosted: "",
         status: "",
-        salary:""
+        salary: ""
     });
 
-    
+
     const [jobUpdateDetails, { data, isSuccess, isLoading, error }] = useJobUpdateDetailsMutation();
 
     const formatDate = (date) => {
-        if (!date) return ""; 
+        if (!date) return "";
         const parsedDate = new Date(date);
         const year = parsedDate.getFullYear();
         const month = String(parsedDate.getMonth() + 1).padStart(2, "0");
-              const day = String(parsedDate.getDate()).padStart(2, "0");
+        const day = String(parsedDate.getDate()).padStart(2, "0");
         return `${year}-${month}-${day}`;
     };
 
     useEffect(() => {
         if (jobDetails) {
             setInputData({
-                jobTitle: jobDetails.jobTitle,
-                jobDescription: jobDetails.jobDescription,
-                location: jobDetails.location,
-                datePosted: formatDate(jobDetails?.datePosted),
-                status: jobDetails.status,
-                salary:jobDetails.salary
+                jobTitle: jobDetails.jobTitle || "",
+                jobDescription: jobDetails.jobDescription || "",
+                jobType: jobDetails.jobType || "",
+                location: jobDetails.location || "",
+                datePosted: formatDate(jobDetails.datePosted),
+                status: jobDetails.status || "",
+                salary: jobDetails.salary || "",
             });
         }
     }, [jobDetails]);
@@ -85,7 +89,9 @@ const UpdateJob = () => {
         setInputData({ ...inputData, status: value });
     };
 
-
+    const selectedJobType = (value) => {
+        setInputData({ ...inputData, jobType: value })
+    }
     const handleSubmit = () => {
         console.log(inputData);
         jobUpdateDetails({ inputData, id });
@@ -102,14 +108,14 @@ const UpdateJob = () => {
                     <form>
                         <div className="grid w-full items-center gap-4">
                             <div className="flex items-center gap-4">
-                                <Label  htmlFor="jobTitle">Job Title</Label>
+                                <Label htmlFor="jobTitle">Job Title</Label>
                                 <Input
                                     id="jobTitle"
                                     name="jobTitle"
                                     value={inputData.jobTitle}
                                     onChange={onChangeHandler}
                                     placeholder="Title of the job"
-                                    
+
                                 />
                             </div>
                             <div className="flex items-center gap-4">
@@ -122,6 +128,7 @@ const UpdateJob = () => {
                                     placeholder="Add job description"
                                 />
                             </div>
+
                             <div className="flex items-center gap-4">
                                 <Label htmlFor="location">Location</Label>
                                 <Input
@@ -131,6 +138,22 @@ const UpdateJob = () => {
                                     onChange={onChangeHandler}
                                     placeholder="Add location"
                                 />
+                            </div>
+                            <div className="flex items-center gap-4">
+                                <Label htmlFor="jobType">jobType</Label>
+                                <Select
+                                    defaultValue={inputData.jobType}
+                                    onValueChange={selectedJobType}
+                                >
+                                    <SelectTrigger id="JobType">
+                                        <SelectValue placeholder="Job Type" />
+                                    </SelectTrigger>
+                                    <SelectContent position="popper">
+                                        <SelectItem value="Full-time">Full-time</SelectItem>
+                                        <SelectItem value="Part-time">Part-time</SelectItem>
+                                        <SelectItem value="Remote">Remote</SelectItem>
+                                    </SelectContent>
+                                </Select>
                             </div>
                             <div className="flex items-center gap-4">
                                 <Label htmlFor="salary">Salary</Label>

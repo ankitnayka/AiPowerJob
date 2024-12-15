@@ -13,6 +13,10 @@ import EmployerDashboard from "./components/employer/EmployerDashboard"
 import EmployerOverview from "./components/employer/EmployerOverview"
 import ViewJobsPost from "./components/employer/jobManage/ViewJobsPost"
 import UpdateJob from "./components/employer/jobManage/UpdateJob"
+import JobDashboard from '../src/components/JobDashboard'
+import JobDescription from "./components/JobDescription"
+import ApplicationForm from "./components/ApplicationForm "
+import JobApplications from "./components/employer/jobManage/JobApplications"
 
 
 const appRouter = createBrowserRouter([
@@ -64,9 +68,28 @@ const appRouter = createBrowserRouter([
           {
             path:"employerViewJobsPost/:id",
             element:<UpdateJob/>
+          },
+          {
+            path:"jobApplication/:jobId",
+            element:<JobApplications/>
           }
+          
         ]
       },
+      //jobs on Display
+      {
+        path:"jobDashboard",
+        element:<JobDashboard/>
+      },
+      {
+        path:"jobdescription/:jobId",
+        element:<JobDescription/>
+      },
+      {
+        path:"applyJob/:jobId",
+        element:<ApplicationForm/>
+      }
+      
 
 
     ]
